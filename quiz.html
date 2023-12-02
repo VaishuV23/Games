@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Quiz</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, button {
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #quiz-options {
+      text-align: left;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="quiz-container">
+  <h1>JavaScript Quiz</h1>
+
+  <form id="quiz-form">
+    <label for="quiz-question">Question:</label>
+    <p id="quiz-question"></p>
+
+    <div id="quiz-options"></div>
+
+    <label for="answer-choice">Your Answer (1-4):</label>
+    <input type="text" id="answer-choice" name="answer-choice" required>
+
+    <button type="button" onclick="checkAnswer()">Check Answer</button>
+    <button type="button" onclick="displayScore()">Display Score</button>
+  </form>
+
+  <div id="quiz-results"></div>
+</div>
+
+<script>
+  const quizArray = [
+    {
+      "Question": "Which is the biggest continent in the world?",
+      "Options": ['1. North America', '2. Asia', '3. Africa', '4. Australia'],
+      "answer": 2
+    },
+    {
+      "Question": "Which is the longest river in the world?",
+      "Options": ['1. Great Ganga', '2. Nile', '3. Amazon', '4. Niger'],
+      "answer": 1
+    },
+    {
+      "Question": "Which is the longest ocean in the world?",
+      "Options": ['1. Indian Ocean', '2. Pacific Ocean', '3. Arctic Ocean', '4. Atlantic Ocean'],
+      "answer": 1
+    },
+    {
+      "Question": "Which is the largest animal in the world?",
+      "Options": ['1. Shark', '2. Blue whale', '3. Elephant', '4. Giraffe'],
+      "answer": 1
+    },
+    {
+      "Question": "Which is the largest flower in the world?",
+      "Options": ['1. Rafflesia', '2. Jasmine', '3. Balloon Flower', '4. Camellia'],
+      "answer": 0
+    }
+  ];
+
+  let currentQuestion = 0;
+  let correctAnswers = 0;
+  let wrongAnswers = 0;
+
+  function displayQuestion() {
+    const question = quizArray[currentQuestion];
+    document.getElementById('quiz-question').textContent = question.Question;
+
+    const optionsContainer = document.getElementById('quiz-options');
+    optionsContainer.innerHTML = ''; // Clear previous options
+
+    question.Options.forEach((option, index) => {
+      const optionLabel = document.createElement('label');
+      optionLabel.innerHTML = `<input type="radio" name="options" value="${index}">${option}`;
+      optionsContainer.appendChild(optionLabel);
+    });
+  }
+
+  function checkAnswer() {
+    const answerChoice = document.querySelector('input[name="options"]:checked');
+    if (!answerChoice) {
+      alert("Please select an answer.");
+      return;
+    }
+
+    const question = quizArray[currentQuestion];
+    const correctAnswer = question.answer;
+
+    if (parseInt(answerChoice.value) === correctAnswer) {
+      alert("Correct!");
+      correctAnswers++;
+    } else {
+      alert("Wrong!\nThe correct answer is: " + (correctAnswer + 1));
+      wrongAnswers++;
+    }
+
+    // Move to the next question
+    currentQuestion++;
+
+    // Check if there are more questions
+    if (currentQuestion < quizArray.length) {
+      displayQuestion();
+    } else {
+      alert("Quiz ended.");
+    }
+  }
+
+  function calculatePercentage() {
+    return (correctAnswers / quizArray.length) * 100;
+  }
+
+  function displayScore() {
+    const percentage = calculatePercentage();
+    document.getElementById('quiz-results').innerHTML = "Your Score: " + percentage.toFixed(2) + "%";
+  }
+
+  // Initial display
+  displayQuestion();
+</script>
+
+</body>
+</html>
